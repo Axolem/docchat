@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "commonjs",
   "scripts": {
-    "start": "node index.js",
+    "start": "node ./dist/index.js",
     "dev": "bun --watch index.ts",
     "build": "tsc"
   },
