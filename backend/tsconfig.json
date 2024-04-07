@@ -23,7 +23,7 @@
 		"noPropertyAccessFromIndexSignature": true,
 
 		// Build output
-		"outDir": "./dist",
+		"outDir": "./",
 		"rootDir": "./",
 		"declaration": false,
 		"sourceMap": false,

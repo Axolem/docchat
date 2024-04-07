@@ -1,7 +1,7 @@
 {
   "name": "docchat",
   "module": "index.ts",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "start": "node index.js",
     "dev": "bun --watch index.ts",
