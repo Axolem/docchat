@@ -210,7 +210,7 @@ app.get("validate/:token", async ({ params, jwt }) => {
 )
 
 // biome-ignore lint/complexity/useLiteralKeys: <explanation>
-app.listen(process.env['PORT'] || 3000, () => {
-    console.log('Server running on port 3000')
+app.listen(process.env['PORT'] || 3000, (e) => {
+    console.log('Server running on port', e.port)
 })
 
