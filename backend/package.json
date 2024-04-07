@@ -3,10 +3,9 @@
   "module": "index.ts",
   "type": "module",
   "scripts": {
-    "start": "bun --watch index.ts",
-    "dev": "ts-node-dev --respawn --transpile-only index.ts",
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "dev": "bun --watch index.ts",
+    "build": "tsc"
   },
   "devDependencies": {
     "@types/bun": "latest"
