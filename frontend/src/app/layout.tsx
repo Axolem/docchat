@@ -1,19 +1,21 @@
 import { Hedvig_Letters_Sans } from "next/font/google";
 import { ThemeProvider } from "@/providers/theme";
 import "./globals.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { QueryProvider } from "@/providers/query";
 import { Toaster } from "@/components/ui/sonner";
 import Navbar from "@/components/navbar";
 import Script from "next/script";
-import { cn } from "@/lib/utils";
 import Footer from "@/components/footer";
 import { AuthProvider } from "@/providers/auth";
 
 const inter = Hedvig_Letters_Sans({ weight: "400", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-	title: "Doc Chat",
+	title: {
+		default: "Doc Chat",
+		template: "%s | Doc Chat",
+	},
 	description: "A chat app to chat with your documents",
 	applicationName: "Doc Chat",
 	icons: [
@@ -47,7 +49,21 @@ export const metadata: Metadata = {
 		type: "website",
 		siteName: "Doc Chat",
 		url: "https://docchat.axole.online",
-	}
+	},
+	generator: "Next.js",
+	formatDetection: {
+		telephone: false,
+	},
+	appleWebApp: {
+		capable: true,
+		statusBarStyle: "default",
+		title: "Doc Chat",
+		// startUpImage: [],
+	},
+};
+
+export const viewport: Viewport = {
+	themeColor: "#FFFFFF",
 };
 
 export default function RootLayout({
