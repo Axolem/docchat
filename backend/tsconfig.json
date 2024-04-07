@@ -9,7 +9,7 @@
 
 		// Bundler mode
 		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
+		"allowImportingTsExtensions": false,
 		"verbatimModuleSyntax": true,
 
 		// Best practices
@@ -25,7 +25,10 @@
 		// Build output
 		"outDir": "./dist",
 		"rootDir": "./",
-		"sourceMap": true,
+		"declaration": false,
+		"sourceMap": false,
+		"composite": false,
+		"incremental": true,
 		"removeComments": true,
 
 		"noEmitOnError": true
