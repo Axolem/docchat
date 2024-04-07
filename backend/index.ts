@@ -10,6 +10,7 @@ import { swagger } from '@elysiajs/swagger';
 import type { Id } from './convex/_generated/dataModel.js';
 import { jwt } from '@elysiajs/jwt'
 import { cors } from '@elysiajs/cors'
+import { createHash } from "node:crypto"
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
 const client = new ConvexHttpClient(process.env.CONVEX_URL!);
@@ -27,13 +28,18 @@ const app = new Elysia()
             }
         }
     }))
-jwt({
-    name: 'jwt',
-    // biome-ignore lint/style/noNonNullAssertion: <explanation>
-    secret: process.env.JWT_SECRET!,
+    .use(jwt({
+        name: "jwt",
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
+        secret: process.env.JWT_SECRET!,
+        exp: "1d",
+    }));
+
+
+app.get("/", async () => {
+    const files = await client.query(api.files.getUserFiles, { userId: "j97cjrjqz99n61h7jm05qz9wsh6pnptq" as Id<"users"> });
+    return new Response(JSON.stringify(files), { status: 200, statusText: 'OK', headers: { 'Content-Type': 'application/json' } })
 })
-
-
 
 app.post('/', async ({ body }) => {
 
@@ -63,7 +69,7 @@ app.post('/', async ({ body }) => {
 
 app.post('/file', async ({ body }) => {
     try {
-
+        console.log(body.files)
 
         body.files.map(async (file: File) => {
             const loader = new PDFLoader(file, { parsedItemSeparator: "", splitPages: true });
@@ -111,6 +117,94 @@ app.delete("/file/:id", async ({ params }) => {
     })
 })
 
+app.post("signup", async ({ body }) => {
 
-app.listen(3000)
+    const securePassword = createHash('sha256').update(body.password).digest('hex');
+
+    try {
+        await client.mutation(api.files.createUser, {
+            email: body.email,
+            password: securePassword,
+            role: "user"
+        });
+
+        return new Response(JSON.stringify({ message: "Created successfully" }), { status: 200, statusText: 'OK', headers: { 'Content-Type': 'application/json' } })
+
+    } catch (error) {
+        if (error instanceof Error) {
+            return new Response(JSON.stringify({ message: error.message.split("\n")[1].split(":")[1] }), { status: 409, statusText: 'Duplicate', headers: { 'Content-Type': 'application/json' } })
+        }
+
+
+
+        return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500, statusText: 'Internal Server Error', headers: { 'Content-Type': 'application/json' } })
+    }
+}, {
+    body: t.Object({
+        email: t.String({ format: "email", title: "Email" }),
+        password: t.String({ minLength: 8, title: "Password" })
+    })
+})
+
+app.post("signin", async ({ body, jwt }) => {
+    const securePassword = createHash('sha256').update(body.password).digest('hex');
+
+    try {
+        const user = await client.query(api.files.getUserByEmail, { email: body.email });
+
+        if (!user) {
+            return new Response(JSON.stringify({ message: "Invalid credentials" }), { status: 401, statusText: 'Unauthorized', headers: { 'Content-Type': 'application/json' } })
+        }
+
+        if (user.password !== securePassword) {
+            return new Response(JSON.stringify({ message: "Invalid credentials" }), { status: 401, statusText: 'Unauthorized', headers: { 'Content-Type': 'application/json' } })
+        }
+
+        const emptyUser = { ...user, password: "" }
+
+        const token = await jwt.sign(emptyUser)
+
+        return new Response(JSON.stringify({ token, user: emptyUser }), { status: 200, statusText: 'OK', headers: { 'Content-Type': 'application/json' } })
+
+    } catch (error) {
+        if (error instanceof Error) {
+            return new Response(JSON.stringify({ message: error.message.split("\n")[1].split(":")[1] }), { status: 404, statusText: 'Not Found', headers: { 'Content-Type': 'application/json' } })
+        }
+
+        return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500, statusText: 'Internal Server Error', headers: { 'Content-Type': 'application/json' } })
+    }
+},
+    {
+        body: t.Object({
+            email: t.String({ format: "email", title: "Email" }),
+            password: t.String({ minLength: 8, title: "Password" })
+        })
+    }
+)
+
+app.get("validate/:token", async ({ params, jwt }) => {
+    try {
+        const user = await jwt.verify(params.token);
+        if (!user) {
+            return new Response(JSON.stringify({ message: "Invalid token" }), { status: 401, statusText: 'Unauthorized', headers: { 'Content-Type': 'application/json' } })
+        }
+
+        return new Response(JSON.stringify({ user }), { status: 200, statusText: 'OK', headers: { 'Content-Type': 'application/json' } })
+
+    } catch (error) {
+        if (error instanceof Error) {
+            return new Response(JSON.stringify({ message: error.message }), { status: 404, statusText: 'Not Found', headers: { 'Content-Type': 'application/json' } })
+        }
+
+        return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500, statusText: 'Internal Server Error', headers: { 'Content-Type': 'application/json' } })
+    }
+},
+    {
+        params: t.Object({
+            token: t.String()
+        })
+    }
+)
+
+app.listen(3001)
 

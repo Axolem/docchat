@@ -21,6 +21,13 @@ export const createUser = mutation({
         role: v.string(),
     },
     handler: async (ctx, { email, password, role }) => {
+
+        const exists = await ctx.db.query("users").withIndex("email").filter((q) => q.eq(q.field("email"), email)).unique();
+
+        if (exists) {
+            throw new Error("User already exists");
+        }
+
         return await ctx.db.insert("users", {
             email,
             password,
@@ -67,4 +74,15 @@ export const getUserFiles = query({
     },
 });
 
+export const getUserByEmail = query({
+    args: {
+        email: v.string(),
+    },
+    handler: async (ctx, { email }) => {
+        return await ctx.db.query("users")
+            .withIndex("email")
+            .filter((q) => q.eq(q.field("email"), email))
+            .unique();
+    },
+});
 
