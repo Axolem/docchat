@@ -43,9 +43,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         },
         onError: (error) => {
             toast.error(error.message);
+            setLoading(false);
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: ['user'] });
+            setLoading(false);
         },
         onMutate: () => {
             setLoading(true);
