@@ -68,9 +68,10 @@ export const getUserFiles = query({
         userId: v.id("users"),
     },
     handler: async (ctx, { userId }) => {
-        return await ctx.db.query("files")
-            .withIndex("owner").
-            filter((q) => q.eq(q.field("owner"), userId)).collect()
+        // return await ctx.db.query("files")
+        //     .withIndex("owner").
+        //     filter((q) => q.eq(q.field("owner"), userId)).collect()
+        return await ctx.db.query("files").collect();
     },
 });
 
