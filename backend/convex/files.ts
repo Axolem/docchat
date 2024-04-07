@@ -63,14 +63,22 @@ export const deleteFile = mutation({
     },
 });
 
+// export const getUserFiles = query({
+//     args: {
+//         userId: v.id("users"),
+//     },
+//     handler: async (ctx, { userId }) => {
+//         return await ctx.db.query("files")
+//             .withIndex("owner").
+//             filter((q) => q.eq(q.field("owner"), userId)).collect()
+//     },
+// });
+
 export const getUserFiles = query({
     args: {
         userId: v.id("users"),
     },
-    handler: async (ctx, { userId }) => {
-        // return await ctx.db.query("files")
-        //     .withIndex("owner").
-        //     filter((q) => q.eq(q.field("owner"), userId)).collect()
+    handler: async (ctx) => {
         return await ctx.db.query("files").collect();
     },
 });
