@@ -16,7 +16,7 @@ const Message = ({
     uid: string;
 }) => {
     return (
-        <div className="flex px-6">
+        <div className="flex px-4 md:px-6">
             <Avatar className="m-3">
                 <AvatarFallback>
                     <Image src={author === "system" ? aiImage : `https://picsum.photos/seed/${uid}/200/200`} alt={`${author}profile image`} width={200} height={200}
@@ -26,7 +26,7 @@ const Message = ({
             </Avatar>
             <div
 
-                className={cn("flex flex-col gap-1 p-3 rounded-lg my-2",
+                className={cn("flex flex-col gap-1 p-1 md:p-3 rounded-lg my-2",
                     author === "user" ? "shadow-2xl" : "",
                 )}
 
@@ -34,7 +34,7 @@ const Message = ({
                 <h4 className="scroll-m-20 text-base font-semibold tracking-tight">
                     {author === "system" ? "Doc Chat" : "You"}
                 </h4>
-                <p className="text-pretty text-base leading-7 [&:not(:first-child)]:mt-2">{text}</p>
+                <p className="text-pretty text-base leading-7 [&:not(:first-child)]:mt-0 md:[&:not(:first-child)]:mt-2">{text}</p>
                 <Toolbar text={text} />
             </div>
         </div>

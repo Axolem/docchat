@@ -18,11 +18,11 @@ export default function Navbar() {
                 <Link className="text-3xl font-bold leading-none" href="/">
                     <Image src={logo} alt="logo" width={40} height={40} />
                 </Link>
-                <div className="lg:hidden">
+                {/* <div className="lg:hidden">
                     <Button size="icon" variant="ghost" className="navbar-burger flex items-center p-3">
                         <Menu className="h-6 w-6" />
                     </Button>
-                </div>
+                </div> */}
                 {/* <ul className="absolute left-1/2 top-1/2 hidden -translate-x-1/2 -translate-y-1/2 transform lg:mx-auto lg:flex lg:w-auto lg:items-center lg:space-x-6">
                     <li><Link className="text-sm text-gray-400 hover:text-gray-500" href="#">Home</Link></li>
                     <li className="text-gray-300">
@@ -51,12 +51,11 @@ export default function Navbar() {
                         <Link className="mr-auto text-3xl font-bold leading-none" href="#">
                             <Image src={logo} alt="logo" width={40} height={40} />
                         </Link>
-                        <Button className="navbar-close">
-                            {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+                        {/* <Button className="navbar-close">
                             <svg className="h-6 w-6 cursor-pointer text-gray-400 hover:text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" strokeLinejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                             </svg>
-                        </Button>
+                        </Button> */}
                     </div>
                     <div>
                         {/* <ul>

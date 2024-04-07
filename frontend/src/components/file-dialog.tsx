@@ -51,7 +51,7 @@ export default function FileDialog() {
         if (!ref.current) return toast.error("Something went wrong! #1")
         const form = new FormData(ref.current)
 
-        setDuration(form.getAll("files").length * 100)
+        setDuration(form.getAll("files").length * 50)
 
         const response = await fetch(ref.current.action, {
             method: ref.current.method,
@@ -74,16 +74,16 @@ export default function FileDialog() {
             onOpenChange={() => setOpen(!open)}
         >
             <DialogTrigger asChild>
-                <Button variant="link">
+                <Button variant="link" className='justify-start md:justify-center'>
                     <Plus className="-ml-4 mr-2 rounded-full bg-secondary p-1" />
                     <span className="text-xs">Upload files</span>
                 </Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="w-3/4 rounded-md sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>Edit profile</DialogTitle>
+                    <DialogTitle>Upload files</DialogTitle>
                     <DialogDescription>
-                        Upload multiple PDF to chat with your documents
+                        Upload multiple PDF files to chat with
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={(e) => mutate(e)} ref={ref} action={`${process.env.NEXT_PUBLIC_BASE_URL}/file`} method="post" encType="multipart/form-data">

@@ -32,7 +32,7 @@ export default () => {
 
     return (
         <div className="flex h-screen items-center justify-center">
-            <div className="mx-auto w-full max-w-md rounded-none p-4 shadow-input backdrop-blur-lg md:rounded-2xl md:p-8">
+            <div className="mx-auto w-3/4 max-w-md rounded-none p-4 shadow-input backdrop-blur-lg md:w-full md:rounded-2xl md:p-8">
                 <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
                     Welcome back
                 </h2>

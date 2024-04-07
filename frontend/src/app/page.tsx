@@ -6,7 +6,7 @@ import { Ellipsis, Send } from 'lucide-react';
 import { getAnswer } from '@/lib/api';
 import { Input } from '@/components/ui/input';
 import { useMutation } from '@tanstack/react-query';
-import { use, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAuth } from '@/providers/auth';
 
 const FilesList = dynamic(() => import('@/components/files'))
@@ -64,7 +64,7 @@ const Page = () => {
 
     return (
         <div className="relative w-screen">
-            <div className="no-scrollbar mx-auto mb-24 flex w-2/3 flex-col overflow-x-hidden overflow-y-scroll scroll-smooth">
+            <div className="no-scrollbar mx-auto mb-24 flex flex-col overflow-x-hidden overflow-y-scroll scroll-smooth md:w-2/3">
                 {messages.map((message) => (
                     // biome-ignore lint/style/noNonNullAssertion: <explanation>
                     <Message key={message.id} {...message} uid={user?._id!} />
@@ -75,7 +75,7 @@ const Page = () => {
                 }
             </div>
 
-            <div className="fixed bottom-0 left-0 right-0 flex h-1/6 flex-col gap-1 bg-background py-3">
+            <div className="fixed bottom-2 left-14 right-2 flex flex-col gap-1 bg-background pt-3 md:bottom-0 md:left-0 md:right-0 md:h-1/6 md:py-3">
                 <FileDialog />
                 <Input
                     type="text"
@@ -102,7 +102,7 @@ const Page = () => {
                     autoFocus
                     autoCorrect="on"
                     autoCapitalize="sentences"
-                    iconClassName="mx-auto flex w-1/2 items-center gap-4"
+                    iconClassName="flex items-center gap-2 md:mx-auto md:w-1/2 md:gap-4"
                 />
             </div>
 
