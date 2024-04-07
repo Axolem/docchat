@@ -37,6 +37,14 @@ const app = new Elysia()
         exp: "1d",
     }));
 
+app.onRequest((e) => {
+    e.store = { time: Date.now() }
+})
+
+app.onStop((e) => {
+    console.log('Request took', Date.now() - (e.store as { time: number }).time, 'ms')
+})
+
 
 app.get("/", async () => {
     const files = await client.query(api.files.getUserFiles, { userId: "j97cjrjqz99n61h7jm05qz9wsh6pnptq" as Id<"users"> });

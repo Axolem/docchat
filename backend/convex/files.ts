@@ -79,7 +79,7 @@ export const getUserFiles = query({
         userId: v.id("users"),
     },
     handler: async (ctx) => {
-        return await ctx.db.query("files").collect();
+        return await ctx.db.query("files").collect()
     },
 });
 
