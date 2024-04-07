@@ -13,7 +13,8 @@ import { cors } from '@elysiajs/cors'
 import { createHash } from "node:crypto"
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
-const client = new ConvexHttpClient(process.env.CONVEX_URL!);
+// biome-ignore lint/complexity/useLiteralKeys: <explanation>
+const client = new ConvexHttpClient(process.env['CONVEX_URL']!);
 
 const chatModel = new ChatOpenAI();
 const splitter = new RecursiveCharacterTextSplitter();
@@ -31,7 +32,8 @@ const app = new Elysia()
     .use(jwt({
         name: "jwt",
         // biome-ignore lint/style/noNonNullAssertion: <explanation>
-        secret: process.env.JWT_SECRET!,
+        // biome-ignore lint/complexity/useLiteralKeys: <explanation>
+        secret: process.env['JWT_SECRET']!,
         exp: "1d",
     }));
 
@@ -69,7 +71,6 @@ app.post('/', async ({ body }) => {
 
 app.post('/file', async ({ body }) => {
     try {
-        console.log(body.files)
 
         body.files.map(async (file: File) => {
             const loader = new PDFLoader(file, { parsedItemSeparator: "", splitPages: true });
@@ -79,8 +80,10 @@ app.post('/file', async ({ body }) => {
             const newFiles = await client.mutation(api.files.createFile, { name: file.name, owner: body.owner as Id<"users"> });
 
             for (const doc of docs) {
-                doc.metadata.source = file.name;
-                doc.metadata.docId = newFiles;
+                // biome-ignore lint/complexity/useLiteralKeys: <explanation>
+                doc.metadata['source'] = file.name;
+                // biome-ignore lint/complexity/useLiteralKeys: <explanation>
+                doc.metadata['docId'] = newFiles;
             }
 
             const splitDocs = await splitter.splitDocuments(docs);
