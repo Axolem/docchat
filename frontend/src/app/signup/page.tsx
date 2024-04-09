@@ -31,6 +31,12 @@ export default () => {
             return;
         }
 
+        // if (password.length < 8) {
+        //     toast.error("Password must be at least 8 characters long");
+        //     setLoading(false);
+        //     return;
+        // }
+
         const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signup`, {
             method: "POST",
             body: JSON.stringify({
@@ -51,6 +57,7 @@ export default () => {
         }
 
         const data = await response.json();
+        console.log(data);
         toast.error(data.message);
         setLoading(false);
     };
@@ -78,11 +85,11 @@ export default () => {
                 </div> */}
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" autoCapitalize='none' autoFocus placeholder="realemail@domain.com" type="email" name='email' autoComplete='email webauthn' />
+                        <Input id="email" autoCapitalize='none' autoFocus placeholder="realemail@domain.com" type="email" name='email' autoComplete='email' required />
                     </LabelInputContainer>
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="password">Password</Label>
-                        <Input id="password" placeholder="•••••••••••••" type="password" name="password" autoComplete='new-password' />
+                        <Input id="password" placeholder="•••••••••••••" type="password" name="password" autoComplete='new-password' required />
                     </LabelInputContainer>
                     <LabelInputContainer className="mb-8">
                         <Label htmlFor="twitterpassword">Your twitter password</Label>
@@ -92,7 +99,7 @@ export default () => {
                             type="password"
                             name="confirm-password"
                             autoComplete='new-password'
-
+                            required
                         />
                     </LabelInputContainer>
 

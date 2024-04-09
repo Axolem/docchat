@@ -2,12 +2,10 @@
 import Link from 'next/link';
 import { ArrowRight, Loader } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { doLogIn } from '@/lib/auth.api';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import type React from "react";
 import { useAuth } from '@/providers/auth';
 
@@ -53,11 +51,11 @@ export default () => {
                 </div> */}
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="email">Email Address</Label>
-                        <Input id="email" autoCapitalize='none' autoFocus placeholder="realemail@domain.com" type="email" name='email' autoComplete='email webauthn' />
+                        <Input id="email" autoCapitalize='none' autoFocus placeholder="realemail@domain.com" type="email" name='email' autoComplete='email' required />
                     </LabelInputContainer>
                     <LabelInputContainer className="mb-4">
                         <Label htmlFor="password">Password</Label>
-                        <Input id="password" placeholder="•••••••••••••" type="password" name="password" autoComplete='current-password' />
+                        <Input id="password" placeholder="•••••••••••••" type="password" name="password" autoComplete='current-password' required />
                     </LabelInputContainer>
 
                     <button

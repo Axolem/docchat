@@ -25,5 +25,4 @@ export default defineSchema({
         password: v.string(),
         role: v.string(),
     }).index("email", ["email"]),
-
 });

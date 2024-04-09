@@ -2,14 +2,14 @@ import { api } from './convex/_generated/api.js';
 import { ChatOpenAI } from '@langchain/openai';
 import { ChatPromptTemplate } from 'langchain/prompts';
 import { ConvexHttpClient } from 'convex/browser';
+import { cors } from '@elysiajs/cors';
 import { createStuffDocumentsChain } from 'langchain/chains/combine_documents';
 import { Elysia, t } from 'elysia';
+import { jwt } from '@elysiajs/jwt';
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf';
 import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
 import { swagger } from '@elysiajs/swagger';
 import type { Id } from './convex/_generated/dataModel.js';
-import { jwt } from '@elysiajs/jwt'
-import { cors } from '@elysiajs/cors'
 import { createHash } from "node:crypto"
 
 // biome-ignore lint/style/noNonNullAssertion: <explanation>
@@ -41,8 +41,10 @@ app.onRequest((e) => {
     e.store = { time: Date.now() }
 })
 
-app.onStop((e) => {
-    console.log('Request took', Date.now() - (e.store as { time: number }).time, 'ms')
+app.onResponse((e) => {
+    console.log('Request took', Date.now() - (e.store as { time: number }).time, 'ms',
+        `${e.request.method} : ${e.request.url}`
+    )
 })
 
 
@@ -54,6 +56,7 @@ app.get("/", async () => {
 app.post('/', async ({ body }) => {
 
     const matches = await client.action(api.myActions.search, { query: body.message })
+
     const prompt =
         ChatPromptTemplate.fromTemplate("Answer the following question based only on the provided context:  <context>  {context}  </context>  Question: {input} Answer: <format> markdown <format>",);
 
@@ -125,7 +128,8 @@ app.delete("/file/:id", async ({ params }) => {
             maxLength: 50
 
         })
-    })
+    }),
+    type: "application/json"
 })
 
 app.post("signup", async ({ body }) => {
@@ -146,15 +150,14 @@ app.post("signup", async ({ body }) => {
             return new Response(JSON.stringify({ message: error.message.split("\n")[1].split(":")[1] }), { status: 409, statusText: 'Duplicate', headers: { 'Content-Type': 'application/json' } })
         }
 
-
-
         return new Response(JSON.stringify({ message: 'Internal Server Error' }), { status: 500, statusText: 'Internal Server Error', headers: { 'Content-Type': 'application/json' } })
     }
 }, {
     body: t.Object({
         email: t.String({ format: "email", title: "Email" }),
-        password: t.String({ minLength: 8, title: "Password" })
-    })
+        password: t.String({ minLength: 8, title: "Password", description: "Password must be at least 8 characters" })
+    }),
+    type: "application/json"
 })
 
 app.post("signin", async ({ body, jwt }) => {
