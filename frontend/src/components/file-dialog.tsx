@@ -54,8 +54,8 @@ export default function FileDialog() {
         const files = form.getAll("files") as File[];
         const totalSize = files.reduce((acc, file) => acc + file.size, 0);
 
-        setDuration(totalSize / 10_000)
-        // setDuration((form.getAll("files") as File[])[0].size * 50)
+        setDuration(totalSize / 7000)
+        // setDuration(form.getAll("files").length * 50)
 
         const response = await fetch(ref.current.action, {
             method: ref.current.method,

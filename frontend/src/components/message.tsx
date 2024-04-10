@@ -27,7 +27,7 @@ const Message = ({
             <div
 
                 className={cn("flex flex-col gap-1 p-1 md:p-3 rounded-lg my-2",
-                    author === "user" ? "shadow-2xl" : "",
+                    author === "user" ? "shadow-sm" : "",
                 )}
 
             >

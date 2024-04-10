@@ -89,7 +89,8 @@ app.post("signin", async ({ body, jwt }) => {
             return new Response(JSON.stringify({ message: "Invalid credentials" }), { status: 401, statusText: 'Unauthorized', headers: { 'Content-Type': 'application/json' } })
         }
 
-        const emptyUser = { ...user, password: "" }
+        // Remove password from user object
+        const { password, ...emptyUser } = user;
 
         const token = await jwt.sign(emptyUser)
 
