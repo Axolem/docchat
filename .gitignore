@@ -174,3 +174,5 @@ dist
 # Finder (MacOS) folder config
 .DS_Store
 backend/index.js
+backend/bun.lockb
+

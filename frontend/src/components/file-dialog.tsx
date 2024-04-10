@@ -30,7 +30,7 @@ export default function FileDialog() {
         mutationFn: async (e: FormEvent<HTMLFormElement>) => handleSubmit(e),
         mutationKey: ["files", "uploadFiles"],
         onSuccess(_,) {
-            toast.success("Files uploaded successfully")
+            // toast.success("Files uploaded successfully")
             queryClient.invalidateQueries({ queryKey: ["files"] })
         },
         onError(error) {
@@ -51,11 +51,18 @@ export default function FileDialog() {
         if (!ref.current) return toast.error("Something went wrong! #1")
         const form = new FormData(ref.current)
 
-        setDuration(form.getAll("files").length * 50)
+        const files = form.getAll("files") as File[];
+        const totalSize = files.reduce((acc, file) => acc + file.size, 0);
+
+        setDuration(totalSize / 10_000)
+        // setDuration((form.getAll("files") as File[])[0].size * 50)
 
         const response = await fetch(ref.current.action, {
             method: ref.current.method,
-            body: form
+            body: form,
+            headers: {
+                token: localStorage.getItem("token") ?? ""
+            }
         })
 
         if (response.ok) {
@@ -66,7 +73,6 @@ export default function FileDialog() {
         const data = await response.text()
         toast.error(data || "Something went wrong! #2")
     }
-
 
 
     return (
