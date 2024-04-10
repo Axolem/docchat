@@ -20,7 +20,7 @@ const Message = ({
             <Avatar className="m-3">
                 <AvatarFallback>
                     <Image src={author === "system" ? aiImage : `https://picsum.photos/seed/${uid}/200/200`} alt={`${author}profile image`} width={200} height={200}
-                        objectFit='cover'
+                        className='object-cover'
                     />
                 </AvatarFallback>
             </Avatar>

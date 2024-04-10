@@ -30,7 +30,6 @@ const Page = () => {
     const { mutateAsync } = useMutation({
         mutationFn: (_message: string) => getAnswer(_message),
         mutationKey: ["getAnswer"],
-
     })
 
     const sendMessage = () => {

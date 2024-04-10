@@ -13,7 +13,9 @@ export const getAnswer = async (query: string) => {
     const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL!, {
         method: "POST",
         body: form_data,
-        redirect: "follow"
+        headers: {
+            token: localStorage.getItem("token") ?? "",
+        }
     })
 
     if (!res.ok) {
@@ -28,7 +30,12 @@ export const useGetFiles = () => {
         queryKey: ["files"],
         queryFn: async () => {
             // biome-ignore lint/style/noNonNullAssertion: <explanation>
-            const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL!)
+            const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL!, {
+                headers: {
+                    token: localStorage.getItem("token") ?? "",
+                }
+
+            })
 
             if (!res.ok) {
                 throw (await res.text())
@@ -49,7 +56,10 @@ export const useDeleteFile = () => {
     return useMutation({
         mutationFn: async ({ id }: { id: string; name: string }) => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/file/${id}`, {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    token: localStorage.getItem("token") ?? "",
+                }
             })
 
             if (!res.ok) {

@@ -28,7 +28,7 @@ export const doLogIn = async (email: string, password: string) => {
             path: '/'
         });
 
-        return data.user as User;
+        return { ...data.user, token: data.token } as User;
     }
 
     return false;
@@ -58,7 +58,10 @@ export const fetchUser = async () => {
     const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/validate/${token.value}`, { next: { revalidate: 3600 * 6 } });
 
     if (response.ok) {
-        return (await response.json()).user as User;
+        return {
+            ...(await response.json()).user,
+            token: token.value
+        } as User;
     }
 
     cookies().set('token', '', {

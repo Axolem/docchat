@@ -61,6 +61,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
     const logout = () => {
         setUser(null);
+        clearLocalStorage()
         doLogOut();
         route.replace('/signin');
         toast.success('Logged out successfully');
@@ -72,24 +73,27 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
         if (user) {
             setUser(JSON.parse(user));
+            localStorage.setItem("token", JSON.parse(user).token);
             fetchUser().then((data) => {
                 if (data) {
                     setUser(data);
+                    localStorage.setItem("token", data.token);
                 } else {
                     setUser(null);
                 }
             });
-        } else {
-            doLogOut();
-            route.replace('/signin');
+            return;
         }
+        doLogOut();
+        route.replace('/signin');
     }, []);
 
     useEffect(() => {
         if (user) {
             localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('token', user.token);
         } else {
-            localStorage.removeItem('user');
+            clearLocalStorage()
         }
     }, [user]);
 
@@ -109,3 +113,8 @@ export const useAuth = () => {
 
     return context;
 };
+
+function clearLocalStorage() {
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+}
