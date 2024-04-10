@@ -1,5 +1,6 @@
 import { toast } from 'sonner';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '@/providers/auth';
 
 if (!process.env.NEXT_PUBLIC_BASE_URL) {
     throw ("NEXT_PUBLIC_BASE_URL is required")
@@ -26,6 +27,7 @@ export const getAnswer = async (query: string) => {
 }
 
 export const useGetFiles = () => {
+    const { logout } = useAuth()
     return useQuery({
         queryKey: ["files"],
         queryFn: async () => {
@@ -34,11 +36,13 @@ export const useGetFiles = () => {
                 headers: {
                     token: localStorage.getItem("token") ?? "",
                 }
-
             })
 
             if (!res.ok) {
-                throw (await res.text())
+                if (res.status === 401) {
+                    logout()
+                }
+                throw (await res.json())
             }
 
             return await res.json() as {
@@ -53,6 +57,7 @@ export const useGetFiles = () => {
 
 export const useDeleteFile = () => {
     const queryClient = useQueryClient()
+    const { logout } = useAuth()
     return useMutation({
         mutationFn: async ({ id }: { id: string; name: string }) => {
             const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/file/${id}`, {
@@ -63,13 +68,16 @@ export const useDeleteFile = () => {
             })
 
             if (!res.ok) {
-                throw (await res.text())
+                if (res.status === 401) {
+                    logout()
+                }
+                throw (await res.json())
             }
 
             queryClient.invalidateQueries({ queryKey: ["files"] })
         },
         onError: (error) => {
-            console.error(error)
+            // console.error(error)
             toast.error(error.message, { dismissible: true, duration: 2000, })
         },
         onSuccess(_, variables) {
