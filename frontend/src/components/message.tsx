@@ -122,6 +122,7 @@ const MessageV2 = ({
 									)}
 									language={match[1]}
 									style={darcula}
+									className={cn(className, "rounded-md")}
 								/>
 							) : (
 								<code
