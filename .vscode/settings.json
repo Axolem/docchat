@@ -4,7 +4,10 @@
 		"docchat",
 		"Elysia",
 		"elysiajs",
+		"Katex",
+		"kwargs",
 		"openai",
+		"rehype",
 		"signin",
 		"sonner"
 	]
