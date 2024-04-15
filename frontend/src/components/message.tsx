@@ -9,10 +9,10 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Bug, Copy, Forward } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { darcula } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { memo, RefObject, useRef } from "react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { toast } from "sonner";
 import "katex/dist/katex.min.css";
-import { memo } from "react";
 
 const Message = ({
 	text,
@@ -69,7 +69,7 @@ const MessageV2 = ({
 	id: string;
 	uid: string;
 }) => {
-	console.log("text", text);
+	const ref = useRef<RefObject<SyntaxHighlighter>>(null);
 	return (
 		<div className="flex px-4 md:px-6">
 			<div className="w-1/6">
@@ -113,6 +113,7 @@ const MessageV2 = ({
 							);
 							return match ? (
 								<SyntaxHighlighter
+									ref={ref as any}
 									{...rest}
 									PreTag="div"
 									children={String(children).replace(
