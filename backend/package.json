@@ -24,6 +24,7 @@
     "convex": "^1.11.0",
     "elysia": "^1.0.13",
     "elysia-rate-limit": "^3.1.4",
+    "hnswlib-node": "^1.4.2",
     "langchain": "^0.1.31",
     "pdf-parse": "^1.1.1"
   }
