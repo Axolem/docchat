@@ -8,6 +8,7 @@ export default function Footer() {
 				target="_blank"
 				href="https://www.freepik.com/free-photo/3d-rendering-zoom-call-avatar_29803186.htm#fromView=search&page=1&position=49&uuid=986f6156-9a4f-483a-bca0-47f2627964e4"
 				rel="noreferrer"
+				className="mx-auto max-w-fit text-center"
 			>
 				Image by freepik
 			</a>
