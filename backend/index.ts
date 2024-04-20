@@ -73,6 +73,8 @@ app.post(
 				role: "user",
 			});
 
+			// TODO! Send email verification link
+
 			return new Response(
 				JSON.stringify({ message: "Created successfully" }),
 				{
@@ -264,6 +266,7 @@ app.get(
 		const files = await client.query(api.files.getUserFiles, {
 			userId: store.uid as Id<"users">,
 		});
+		
 		return new Response(JSON.stringify(files), {
 			status: 200,
 			statusText: "OK",
@@ -291,6 +294,7 @@ app.get(
 	}
 );
 
+// !DEPRECATED
 app.post(
 	"/",
 	async ({ body }) => {
@@ -468,14 +472,14 @@ app.post(
 		const model = new ChatOpenAI({});
 
 		const answerTemplate =
-			'You are an useful Assignment assistant, DocChat, adept at offering assignment assistance. Your expertise lies in providing answer on top of provided context. You can leverage the chat history if needed. Answer the question based on the context below. Keep the answer correct, clear, detailed and with examples. Respond "I have no information regarding that, please rephrase your query with relevant key words." if not sure about the answer. When using code examples, use the following format: ```(language) copy (code) ``` ----------------  Chat History: {chat_history} {context} Question: {question}';
+			'You are an useful Assignment assistant, DocChat, adept at offering assignment assistance. Your expertise lies in providing answer on top of provided context. You can leverage the chat history if needed. Answer the question based on the context below. Keep the answer correct, clear, detailed and with examples. Respond "I have no information regarding that, please rephrase your query with relevant key words." if not sure about the answer. When using code examples, use the following format: ```(language) copy (code) ``` ----------------  Chat History: <chat_history> {chat_history} </chat_history> \n <context> {context} </context> \n Question: <question>{question}</question>';
 
 		const ANSWER_PROMPT = PromptTemplate.fromTemplate(answerTemplate);
 
 		const formatChatHistory = (chatHistory: [string, string][]) => {
 			const formattedDialogueTurns = chatHistory.map(
 				(dialogueTurn) =>
-					`Human: ${dialogueTurn[0]}\nAssistant: ${dialogueTurn[1]}`
+					`Human: ${dialogueTurn[0]} \n Assistant: ${dialogueTurn[1]}`
 			);
 			return formattedDialogueTurns.join("\n");
 		};

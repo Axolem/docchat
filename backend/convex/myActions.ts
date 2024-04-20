@@ -6,33 +6,33 @@ import { action } from "./_generated/server.js";
 import { v } from "convex/values";
 
 export const ingest = action({
-    args: {
-        texts: v.array(v.string()),
-        metadata: v.array(v.string()),
-    },
-    handler: async (ctx, { texts, metadata }) => {
-        try {
-            const metaJson = metadata.map((m) => JSON.parse(m));
-            const meta = metaJson.map((m) => ({
-                ...m,
-                pdf: {
-                    ...m.pdf,
-                    metadata: {}
-                }
-            }));
+	args: {
+		texts: v.array(v.string()),
+		metadata: v.array(v.string()),
+	},
+	handler: async (ctx, { texts, metadata }) => {
+		try {
+			const metaJson = metadata.map((m) => JSON.parse(m));
+			const meta = metaJson.map((m) => ({
+				...m,
+				pdf: {
+					...m.pdf,
+					metadata: {},
+				},
+			}));
 
-            await ConvexVectorStore.fromTexts(
-                texts,
-                meta,
-                new OpenAIEmbeddings(),
-                { ctx }
-            )
+			await ConvexVectorStore.fromTexts(
+				texts,
+				meta,
+				new OpenAIEmbeddings(),
+				{ ctx }
+			);
 
-            return { message: "Success" };
-        } catch (error) {
-            throw new Error((error as Error).message);
-        }
-    },
+			return { message: "Success" };
+		} catch (error) {
+			throw new Error((error as Error).message);
+		}
+	},
 });
 /*
 export const ingestDocs = action({
@@ -49,16 +49,18 @@ export const ingestDocs = action({
 */
 
 export const search = action({
-    args: {
-        query: v.string(),
-    },
-    handler: async (ctx, args) => {
-        const vectorStore = new ConvexVectorStore(new OpenAIEmbeddings(), { ctx });
+	args: {
+		query: v.string(),
+	},
+	handler: async (ctx, args) => {
+		const vectorStore = new ConvexVectorStore(new OpenAIEmbeddings(), {
+			ctx,
+		});
 
-        const resultOne = await vectorStore.similaritySearch(args.query, 1);
+		const resultOne = await vectorStore.similaritySearch(args.query, 1);
 
-        return {
-            resultOne: JSON.stringify(resultOne),
-        };
-    },
+		return {
+			resultOne: JSON.stringify(resultOne),
+		};
+	},
 });
