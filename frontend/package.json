@@ -21,7 +21,7 @@
     "@tanstack/react-query": "^5.29.2",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
-    "framer-motion": "^11.0.28",
+    "framer-motion": "^11.1.7",
     "lucide-react": "^0.365.0",
     "next": "14.1.4",
     "next-themes": "^0.3.0",
@@ -35,12 +35,12 @@
     "remove-markdown": "^0.5.0",
     "sharp": "^0.33.3",
     "sonner": "^1.4.41",
-    "tailwind-merge": "^2.2.2",
+    "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20.12.7",
-    "@types/react": "^18.2.78",
+    "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.25",
     "@types/react-syntax-highlighter": "^15.5.11",
     "@types/remove-markdown": "^0.3.4",
@@ -50,5 +50,5 @@
     "typescript": "^5.4.5",
     "webpack": "^5.91.0"
   },
-  "packageManager": "pnpm@8.15.7"
+  "packageManager": "pnpm@9.0.4"
 }
