@@ -14,6 +14,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { toast } from "sonner";
 import "katex/dist/katex.min.css";
 
+// !DEPRECATED
 const Message = ({
 	text,
 	author,
@@ -322,6 +323,7 @@ const Toolbar = ({ text }: { text: string }) => {
 		// TODO! Implement a report feature
 		alert("Feature not implemented yet!");
 	};
+
 	return (
 		<div className="mx-auto flex w-min justify-center gap-4">
 			<Copy
