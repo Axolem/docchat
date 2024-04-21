@@ -70,8 +70,7 @@ app.post(
 		const token = await jwt.sign({ email: body.email });
 
 		try {
-			// TODO! Send email verification link
-			const emailResponse = await sendEmail(body.email, token);
+			await sendEmail(body.email, token);
 
 			await client.mutation(api.files.createUser, {
 				email: body.email,
