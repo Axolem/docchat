@@ -176,3 +176,4 @@ dist
 backend/index.js
 backend/bun.lockb
 
+frontend/next.config.mjs

@@ -1,77 +1,80 @@
 "use server";
-import { cookies } from 'next/headers'
-import type { User } from './types';
+import { cookies } from "next/headers";
+import type { User } from "./types";
 
 export const doLogIn = async (email: string, password: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`, {
-        method: "POST",
-        body: JSON.stringify({
-            email,
-            password,
-        }),
-        headers: {
-            "Content-Type": "application/json",
-        },
-    });
+	const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signin`, {
+		method: "POST",
+		body: JSON.stringify({
+			email,
+			password,
+		}),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 
-    if (response.ok) {
-        const data = await response.json() as {
-            user: User, token: string
-        };
+	if (response.ok) {
+		const data = (await response.json()) as {
+			user: User;
+			token: string;
+		};
 
-        cookies().set('token', data.token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 60 * 60 * 24, // One day
-            priority: 'high',
-            sameSite: 'strict',
-            path: '/'
-        });
+		cookies().set("token", data.token, {
+			httpOnly: true,
+			secure: process.env.NODE_ENV === "production",
+			maxAge: 60 * 60 * 24, // One day
+			priority: "high",
+			sameSite: "strict",
+			path: "/",
+		});
 
-        return { ...data.user, token: data.token } as User;
-    }
+		return { ...data.user, token: data.token } as User;
+	}
 
-    return false;
+	return ((await response.json()) as { message: string }).message;
 };
 
 export const doLogOut = async () => {
-    cookies().set('token', '', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 0,
-        priority: 'high',
-        sameSite: 'strict',
-        path: '/'
-    });
+	cookies().set("token", "", {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		maxAge: 0,
+		priority: "high",
+		sameSite: "strict",
+		path: "/",
+	});
 
-    return true;
-}
-
+	return true;
+};
 
 export const fetchUser = async () => {
-    const token = cookies().get('token');
+	const token = cookies().get("token");
 
-    if (!token) {
-        return false;
-    }
+	if (!token) {
+		return false;
+	}
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/validate/${token.value}`, { next: { revalidate: 3600 * 6 } });
+	const response = await fetch(
+		`${process.env.NEXT_PUBLIC_BASE_URL}/validate/${token.value}`,
+		{ next: { revalidate: 3600 * 6 } }
+	);
 
-    if (response.ok) {
-        return {
-            ...(await response.json()).user,
-            token: token.value
-        } as User;
-    }
+	if (response.ok) {
+		return {
+			...(await response.json()).user,
+			token: token.value,
+		} as User;
+	}
 
-    cookies().set('token', '', {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        maxAge: 0,
-        priority: 'high',
-        sameSite: 'strict',
-        path: '/'
-    });
+	cookies().set("token", "", {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		maxAge: 0,
+		priority: "high",
+		sameSite: "strict",
+		path: "/",
+	});
 
-    return false;
-}
+	return false;
+};

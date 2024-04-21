@@ -113,3 +113,15 @@ export const useDeleteFile = () => {
 		},
 	});
 };
+
+export const verifyEmail = async (token: string) => {
+	const res = await fetch(
+		`${process.env.NEXT_PUBLIC_BASE_URL}/verify/${token}`
+	);
+
+	if (!res.ok) {
+		return false;
+	}
+
+	return true;
+};

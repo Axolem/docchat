@@ -21,11 +21,14 @@
     "@langchain/community": "^0.0.44",
     "@langchain/core": "^0.1.54",
     "@langchain/openai": "^0.0.26",
+    "@react-email/components": "0.0.16",
     "convex": "^1.11.0",
     "elysia": "^1.0.13",
     "elysia-rate-limit": "^3.1.4",
     "hnswlib-node": "^1.4.2",
     "langchain": "^0.1.31",
-    "pdf-parse": "^1.1.1"
+    "pdf-parse": "^1.1.1",
+    "react-email": "2.1.1",
+    "resend": "^3.2.0"
   }
 }

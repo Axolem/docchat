@@ -15,6 +15,7 @@ import { RunnableSequence } from "langchain/runnables";
 import { swagger } from "@elysiajs/swagger";
 import type { Id } from "./convex/_generated/dataModel.js";
 import { createHash } from "node:crypto";
+import { sendEmail } from "./utils/email.js";
 
 // biome-ignore lint/style/noNonNullAssertion: Null assertion is used to avoid unnecessary checks
 // biome-ignore lint/complexity/useLiteralKeys:
@@ -61,19 +62,23 @@ const app = new Elysia()
 
 app.post(
 	"signup",
-	async ({ body }) => {
+	async ({ body, jwt }) => {
 		const securePassword = createHash("sha256")
 			.update(body.password)
 			.digest("hex");
 
+		const token = await jwt.sign({ email: body.email });
+
 		try {
+			// TODO! Send email verification link
+			const emailResponse = await sendEmail(body.email, token);
+
 			await client.mutation(api.files.createUser, {
 				email: body.email,
 				password: securePassword,
 				role: "user",
+				token,
 			});
-
-			// TODO! Send email verification link
 
 			return new Response(
 				JSON.stringify({ message: "Created successfully" }),
@@ -84,6 +89,7 @@ app.post(
 				}
 			);
 		} catch (error) {
+			console.log(error);
 			if (error instanceof Error) {
 				return new Response(
 					JSON.stringify({
@@ -154,8 +160,19 @@ app.post(
 				);
 			}
 
+			if (!user.isEmailVerified) {
+				return new Response(
+					JSON.stringify({ message: "Email not verified" }),
+					{
+						status: 401,
+						statusText: "Unauthorized",
+						headers: { "Content-Type": "application/json" },
+					}
+				);
+			}
+
 			// Remove password from user object
-			const { password, ...emptyUser } = user;
+			const { password, isEmailVerified, ...emptyUser } = user;
 
 			const token = await jwt.sign(emptyUser);
 
@@ -196,6 +213,63 @@ app.post(
 	}
 );
 
+app.get(
+	"verify/:token",
+	async ({ params, jwt }) => {
+		try {
+			const user = (await jwt.verify(params.token)) as { email: string };
+			if (!user) {
+				return new Response(
+					JSON.stringify({ message: "Invalid token" }),
+					{
+						status: 401,
+						statusText: "Unauthorized",
+						headers: { "Content-Type": "application/json" },
+					}
+				);
+			}
+
+			await client.mutation(api.files.verifyUser, {
+				email: user.email,
+				token: params.token,
+			});
+
+			return new Response(
+				JSON.stringify({ message: "Email verified successfully" }),
+				{
+					status: 200,
+					statusText: "OK",
+					headers: { "Content-Type": "application/json" },
+				}
+			);
+		} catch (error) {
+			if (error instanceof Error) {
+				return new Response(
+					JSON.stringify({ message: error.message }),
+					{
+						status: 404,
+						statusText: "Not Found",
+						headers: { "Content-Type": "application/json" },
+					}
+				);
+			}
+
+			return new Response(
+				JSON.stringify({ message: "Internal Server Error" }),
+				{
+					status: 500,
+					statusText: "Internal Server Error",
+					headers: { "Content-Type": "application/json" },
+				}
+			);
+		}
+	},
+	{
+		params: t.Object({
+			token: t.String(),
+		}),
+	}
+);
 app.get(
 	"validate/:token",
 	async ({ params, jwt }) => {
@@ -266,7 +340,7 @@ app.get(
 		const files = await client.query(api.files.getUserFiles, {
 			userId: store.uid as Id<"users">,
 		});
-		
+
 		return new Response(JSON.stringify(files), {
 			status: 200,
 			statusText: "OK",
