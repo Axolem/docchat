@@ -376,9 +376,11 @@ app.get(
 // !DEPRECATED
 app.post(
 	"/",
-	async ({ body }) => {
+	async ({ body, store }) => {
+		console.log(store);
 		const matches = await client.action(api.myActions.search, {
 			query: body.message,
+			userId: store.uid as Id<"users">,
 		});
 
 		const prompt = ChatPromptTemplate.fromTemplate(
@@ -541,9 +543,10 @@ app.delete(
 
 app.post(
 	"/v2",
-	async ({ body }) => {
+	async ({ body, store }) => {
 		const matches = await client.action(api.myActions.search, {
 			query: body.message,
+			userId: store.uid as Id<"users">,
 		});
 
 		const metadata = JSON.parse(matches.resultOne) as MatchesType[];

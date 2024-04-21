@@ -16,6 +16,7 @@ export default defineSchema({
 		.vectorIndex("byEmbedding", {
 			vectorField: "embedding",
 			dimensions: 3072,
+			filterFields: ["metadata.docId"],
 		})
 		.index("id", ["metadata.docId"]),
 	files: defineTable({

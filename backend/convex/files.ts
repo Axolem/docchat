@@ -114,6 +114,7 @@ export const getUserFiles = query({
 	args: {
 		userId: v.id("users"),
 	},
+
 	handler: async (ctx, { userId }) => {
 		if (userId == "j976xfykqqctycvcfzvr52jxeh6qnqkw") {
 			return await ctx.db.query("files").collect();
