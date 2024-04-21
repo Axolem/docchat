@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { MoonIcon, SunIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -9,8 +8,9 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { memo } from 'react';
 
-export default function ThemeToggle() {
+ function ThemeToggle() {
     const { setTheme } = useTheme()
 
     return (
@@ -36,3 +36,4 @@ export default function ThemeToggle() {
         </DropdownMenu>
     )
 }
+export default memo(ThemeToggle)

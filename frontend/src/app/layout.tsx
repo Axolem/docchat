@@ -9,7 +9,13 @@ import Script from "next/script";
 import Footer from "@/components/footer";
 import { AuthProvider } from "@/providers/auth";
 
-const inter = Hedvig_Letters_Sans({ weight: "400", subsets: ["latin"] });
+const inter = Hedvig_Letters_Sans({
+	weight: "400",
+	subsets: ["latin"],
+	display: "swap",
+	fallback: ["sans-serif"],
+	preload: true,
+});
 
 export const metadata: Metadata = {
 	title: {
@@ -25,7 +31,7 @@ export const metadata: Metadata = {
 			href: "/favicon-16x16.png",
 			sizes: "16x16",
 			url: "/favicon-32x32.png",
-		}
+		},
 	],
 	authors: [{ name: "Axole Maranjana", url: "https://axole.online" }],
 	creator: "Axole Maranjana",
@@ -72,7 +78,10 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" className="no-scrollbar">
+		<html
+			lang="en"
+			className="no-scrollbar"
+		>
 			<body className={inter.className}>
 				<ThemeProvider
 					attribute="class"

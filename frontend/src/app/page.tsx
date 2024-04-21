@@ -1,17 +1,16 @@
 "use client";
-import dynamic from "next/dynamic";
 import Message from "@/components/message";
 import { Button } from "@/components/ui/button";
 import { Ellipsis, Send } from "lucide-react";
-import { getAnswer, getAnswerV2 } from "@/lib/api";
+import { getAnswerV2 } from "@/lib/api";
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/providers/auth";
 
-const FilesList = dynamic(() => import("@/components/files"));
-const ThemeToggle = dynamic(() => import("@/components/theme-selector"));
-const FileDialog = dynamic(() => import("@/components/file-dialog"));
+import FilesList from "@/components/files";
+import ThemeToggle from "@/components/theme-selector";
+import FileDialog from "@/components/file-dialog";
 
 const Page = () => {
 	const { user } = useAuth();
@@ -27,10 +26,10 @@ const Page = () => {
 		},
 	]);
 
-	const { mutateAsync } = useMutation({
-		mutationFn: (_message: string) => getAnswer(_message),
-		mutationKey: ["getAnswer"],
-	});
+	// const { mutateAsync } = useMutation({
+	// 	mutationFn: (_message: string) => getAnswer(_message),
+	// 	mutationKey: ["getAnswer"],
+	// });
 
 	const { mutateAsync: mutateAsyncV2 } = useMutation({
 		mutationFn: (_message: string) =>
@@ -40,7 +39,6 @@ const Page = () => {
 			),
 		mutationKey: ["getAnswer"],
 		onError(error) {
-			console.log(error);
 		},
 	});
 

@@ -59,7 +59,6 @@ export default () => {
 		}
 
 		const data = await response.json();
-		console.log(data);
 		toast.error(data.message);
 		setLoading(false);
 	};

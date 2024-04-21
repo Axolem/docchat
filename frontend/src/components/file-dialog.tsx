@@ -14,10 +14,10 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog";
 
-import { type FormEvent, useRef, useState } from "react";
+import { type FormEvent, memo, useRef, useState } from "react";
 import { useAuth } from "@/providers/auth";
 
-export default function FileDialog() {
+function FileDialog() {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [duration, setDuration] = useState(2000);
@@ -146,3 +146,5 @@ export default function FileDialog() {
 		</Dialog>
 	);
 }
+
+export default memo(FileDialog);

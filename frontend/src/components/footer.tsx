@@ -1,8 +1,10 @@
-export default function Footer() {
+import { memo } from "react";
+
+function Footer() {
 	return (
 		<footer className="flex flex-col bg-background py-3 text-center text-muted/70">
 			<p className="text-sm">
-				&copy; 2024 Doc Chat. All rights reserved. v1.1.0
+				&copy; 2024 Doc Chat. All rights reserved. v1.2.0
 			</p>
 			<a
 				target="_blank"
@@ -32,3 +34,5 @@ export default function Footer() {
 		</footer>
 	);
 }
+
+export default memo(Footer);
