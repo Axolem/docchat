@@ -24,7 +24,9 @@ export const ingest = action({
 			await ConvexVectorStore.fromTexts(
 				texts,
 				meta,
-				new OpenAIEmbeddings(),
+				new OpenAIEmbeddings({
+					modelName: "text-embedding-3-large",
+				}),
 				{ ctx }
 			);
 

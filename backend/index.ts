@@ -12,16 +12,16 @@ import { PromptTemplate } from "@langchain/core/prompts";
 import { rateLimit } from "elysia-rate-limit";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { RunnableSequence } from "langchain/runnables";
+import { sendEmail } from "./utils/email.js";
 import { swagger } from "@elysiajs/swagger";
 import type { Id } from "./convex/_generated/dataModel.js";
 import { createHash } from "node:crypto";
-import { sendEmail } from "./utils/email.js";
 
 // biome-ignore lint/style/noNonNullAssertion: Null assertion is used to avoid unnecessary checks
 // biome-ignore lint/complexity/useLiteralKeys:
 const client = new ConvexHttpClient(process.env["CONVEX_URL"]!);
 
-const chatModel = new ChatOpenAI();
+const chatModel = new ChatOpenAI({ modelName: "gpt-4-turbo" });
 const splitter = new RecursiveCharacterTextSplitter();
 
 const app = new Elysia()
@@ -30,6 +30,13 @@ const app = new Elysia()
 		rateLimit({
 			max: 10,
 			duration: 60_000,
+			generator(request, server) {
+				return (
+					request.headers.get("CF-Connecting-IP") ??
+					server?.requestIP(request)?.address ??
+					""
+				);
+			},
 		})
 	)
 	.use(
@@ -88,7 +95,6 @@ app.post(
 				}
 			);
 		} catch (error) {
-			console.log(error);
 			if (error instanceof Error) {
 				return new Response(
 					JSON.stringify({
@@ -473,7 +479,7 @@ app.post(
 	{
 		body: t.Object({
 			files: t.Files({ type: "application/pdf", readOnly: true }),
-			owner: t.String({ default: "j97cjrjqz99n61h7jm05qz9wsh6pnptq" }),
+			owner: t.String(),
 		}),
 		beforeHandle: async ({ jwt, request }) => {
 			const user = await jwt.verify(
@@ -542,8 +548,6 @@ app.post(
 
 		const metadata = JSON.parse(matches.resultOne) as MatchesType[];
 
-		const model = new ChatOpenAI({});
-
 		const answerTemplate =
 			'You are an useful Assignment assistant, DocChat, adept at offering assignment assistance. Your expertise lies in providing answer on top of provided context. You can leverage the chat history if needed. Answer the question based on the context below. Keep the answer correct, clear, detailed and with examples. Respond "I have no information regarding that, please rephrase your query with relevant key words." if not sure about the answer. When using code examples, use the following format: ```(language) copy (code) ``` ----------------  Chat History: <chat_history> {chat_history} </chat_history> \n <context> {context} </context> \n Question: <question>{question}</question>';
 
@@ -567,7 +571,7 @@ app.post(
 					input.context,
 			},
 			ANSWER_PROMPT,
-			model,
+			chatModel,
 		]);
 
 		const results = await answerChain.invoke({

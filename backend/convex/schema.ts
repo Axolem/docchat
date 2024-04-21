@@ -15,7 +15,7 @@ export default defineSchema({
 	})
 		.vectorIndex("byEmbedding", {
 			vectorField: "embedding",
-			dimensions: 1536,
+			dimensions: 3072,
 		})
 		.index("id", ["metadata.docId"]),
 	files: defineTable({
@@ -27,6 +27,6 @@ export default defineSchema({
 		password: v.string(),
 		role: v.string(),
 		isEmailVerified: v.boolean(),
-        token: v.optional(v.string()),
+		token: v.optional(v.string()),
 	}).index("email", ["email"]),
 });
