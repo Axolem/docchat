@@ -34,19 +34,6 @@ export const ingest = action({
 		}
 	},
 });
-/*
-export const ingestDocs = action({
-    args: {
-        documents: v.array(v.string()),
-    },
-    handler: async (ctx, { documents }) => {
-        return await ConvexVectorStore.fromDocuments(
-            documents.map((doc) => JSON.parse(doc)),
-            new OpenAIEmbeddings(), { ctx }
-        )
-    },
-});
-*/
 
 export const search = action({
 	args: {
