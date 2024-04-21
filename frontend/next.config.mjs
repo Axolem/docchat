@@ -1,4 +1,6 @@
+import withPWAInit from "@ducanh2912/next-pwa";
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
 	images: {
 		remotePatterns: [
@@ -8,20 +10,26 @@ const nextConfig = {
 		],
 	},
 };
+const withPWA =
+	process.env.RAILWAY_ENVIRONMENT_NAME === "production"
+		? withPWAInit({
+				dest: "public",
+		  })
+		: null;
 
-export default nextConfig;
+const nextConfigPWA =
+	withPWA !== null
+		? withPWA({
+				images: {
+					remotePatterns: [
+						{
+							hostname: "picsum.photos",
+						},
+					],
+				},
+		  })
+		: null;
 
-// import withPWAInit from "@ducanh2912/next-pwa";
-
-// const withPWA = withPWAInit({
-// 	dest: "public",
-// });
-// export default withPWA({
-// 	images: {
-// 		remotePatterns: [
-// 			{
-// 				hostname: "picsum.photos",
-// 			},
-// 		],
-// 	},
-// });
+export default process.env.RAILWAY_ENVIRONMENT_NAME === "production"
+	? nextConfigPWA
+	: nextConfig;

@@ -56,7 +56,7 @@ export const search = action({
 		const resultOne = await vectorStore.similaritySearch(args.query);
 
 		const result = resultOne.map((r) => {
-			if (docIds.includes(r.metadata.docId)) {
+			if (docIds.includes(r.metadata["docId"])) {
 				return r;
 			}
 		});
