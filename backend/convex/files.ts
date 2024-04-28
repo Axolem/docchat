@@ -148,3 +148,16 @@ export const recordLastActive = mutation({
 		});
 	},
 });
+
+export const countCalls = mutation({
+	args: {
+		userId: v.id("users"),
+	},
+	handler: async (ctx, { userId }) => {
+		const user = await ctx.db.get(userId);
+		const calls = user?.calls || 0;
+		return await ctx.db.patch(userId, {
+			calls: calls + 1,
+		});
+	},
+});
