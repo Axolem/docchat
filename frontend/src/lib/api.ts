@@ -125,3 +125,30 @@ export const verifyEmail = async (token: string) => {
 
 	return true;
 };
+
+export const getUsage = () => {
+	return useQuery({
+		queryKey: ["files"],
+		queryFn: async () => {
+			// biome-ignore lint/style/noNonNullAssertion: <explanation>
+			const res = await fetch(
+				`${process.env.NEXT_PUBLIC_BASE_URL}/usage`,
+				{
+					headers: {
+						token: localStorage.getItem("token") ?? "",
+					},
+				}
+			);
+
+			if (!res.ok) {
+				return {
+					calls: 0,
+				};
+			}
+
+			return (await res.json()) as {
+				calls: number;
+			};
+		},
+	});
+};

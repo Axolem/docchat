@@ -10,9 +10,13 @@ import Image from "next/image";
 import { Button } from "./ui/button";
 import { useAuth } from "@/providers/auth";
 import { memo } from "react";
+import { getUsage } from "@/lib/api";
 
 function User() {
 	const { user, logout } = useAuth();
+
+	const { data } = getUsage();
+
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -32,6 +36,9 @@ function User() {
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
 				<DropdownMenuLabel>{user?.email}</DropdownMenuLabel>
+				<DropdownMenuItem>
+					📊 {data?.calls ?? 0}/100 this month
+				</DropdownMenuItem>
 				{/* <DropdownMenuSeparator />
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem> */}
