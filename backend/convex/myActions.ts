@@ -4,7 +4,7 @@ import { action } from "./_generated/server.js";
 import { api } from "./_generated/api.js";
 import { ConvexVectorStore } from "@langchain/community/vectorstores/convex";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { GenericId, v } from "convex/values";
+import { type GenericId, v } from "convex/values";
 
 const embedding = new OpenAIEmbeddings({
 	modelName: "text-embedding-3-large",
