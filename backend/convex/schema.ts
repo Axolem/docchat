@@ -30,5 +30,6 @@ export default defineSchema({
 		isEmailVerified: v.boolean(),
 		token: v.optional(v.string()),
 		lastLogin: v.optional(v.string()),
+		calls: v.optional(v.number()),
 	}).index("email", ["email"]),
 });
