@@ -97,7 +97,7 @@ export default function RootLayout({
 						</AuthProvider>
 					</QueryProvider>
 				</ThemeProvider>
-				<Toaster />
+				<Toaster position="top-center" />
 				<Script src="/js/nav.js" />
 			</body>
 		</html>
