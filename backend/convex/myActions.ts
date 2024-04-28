@@ -1,10 +1,10 @@
 "use node";
 
-import { action } from "./_generated/server.js";
+import { action, query } from "./_generated/server.js";
 import { api } from "./_generated/api.js";
 import { ConvexVectorStore } from "@langchain/community/vectorstores/convex";
 import { OpenAIEmbeddings } from "@langchain/openai";
-import { v } from "convex/values";
+import { GenericId, v } from "convex/values";
 
 const embedding = new OpenAIEmbeddings({
 	modelName: "text-embedding-3-large",
@@ -41,10 +41,21 @@ export const search = action({
 		userId: v.id("users"),
 	},
 	handler: async (ctx, args) => {
+		const user = await ctx.runQuery(api.user.getUserById, {
+			userId: args.userId,
+		});
+
+		if (!user) {
+			throw new Error("User not found");
+		}
+
+		if (user.calls && user.calls > 100) {
+			throw new Error("User has exceeded the limit of 100 calls");
+		}
+
 		const vectorStore = new ConvexVectorStore(embedding, {
 			ctx,
 		});
-
 		// Get user documents
 		const userDocs = await ctx.runQuery(api.files.getUserFiles, {
 			userId: args.userId,
@@ -55,10 +66,16 @@ export const search = action({
 
 		const resultOne = await vectorStore.similaritySearch(args.query);
 
-		const result = resultOne.map((r) => {
-			if (docIds.includes(r.metadata["docId"])) {
-				return r;
+		const result = resultOne.map(
+			(r: { metadata: { [x: string]: GenericId<"files"> } }) => {
+				if (docIds.includes(r.metadata["docId"])) {
+					return r;
+				}
 			}
+		);
+
+		ctx.runMutation(api.files.countCalls, {
+			userId: args.userId,
 		});
 
 		return {
