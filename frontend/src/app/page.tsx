@@ -11,6 +11,7 @@ import { useAuth } from "@/providers/auth";
 import FilesList from "@/components/files";
 import ThemeToggle from "@/components/theme-selector";
 import FileDialog from "@/components/file-dialog";
+import { toast } from "sonner";
 
 const Page = () => {
 	const { user } = useAuth();
@@ -39,6 +40,7 @@ const Page = () => {
 			),
 		mutationKey: ["getAnswer"],
 		onError(error) {
+			toast.error(error.message);
 		},
 	});
 
@@ -80,12 +82,12 @@ const Page = () => {
 
 	return (
 		<div className="relative w-screen">
-			<div className="no-scrollbar mx-auto mb-24 flex w-full flex-col overflow-x-auto overflow-y-scroll scroll-smooth md:w-2/3">
+			<div className="no-scrollbar mx-auto mb-24 flex w-full flex-col overflow-x-auto overflow-y-scroll scroll-smooth md:w-3/4">
 				{messages.map((message) => (
-					// biome-ignore lint/style/noNonNullAssertion: <explanation>
 					<Message
 						key={message.id}
 						{...message}
+						// biome-ignore lint/style/noNonNullAssertion: <explanation>
 						uid={user?._id!}
 					/>
 				))}

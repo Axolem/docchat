@@ -202,7 +202,7 @@ const MessageV2 = ({
 						ol(props) {
 							return (
 								<ol
-									className="list-inside list-decimal"
+									className="list-decimal"
 									{...props}
 								/>
 							);
@@ -210,7 +210,7 @@ const MessageV2 = ({
 						ul(props) {
 							return (
 								<ul
-									className="mt-2 list-inside list-disc"
+									className="mt-2 list-disc"
 									{...props}
 								/>
 							);
