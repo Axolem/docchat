@@ -29,5 +29,6 @@ export default defineSchema({
 		role: v.string(),
 		isEmailVerified: v.boolean(),
 		token: v.optional(v.string()),
+		lastLogin: v.optional(v.string()),
 	}).index("email", ["email"]),
 });

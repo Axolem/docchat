@@ -137,3 +137,14 @@ export const getUserByEmail = query({
 			.unique();
 	},
 });
+
+export const recordLastActive = mutation({
+	args: {
+		userId: v.id("users"),
+	},
+	handler: async (ctx, { userId }) => {
+		return await ctx.db.patch(userId, {
+			lastLogin: new Date().toISOString(),
+		});
+	},
+});

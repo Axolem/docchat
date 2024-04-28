@@ -133,7 +133,7 @@ app.post(
 
 app.post(
 	"signin",
-	async ({ body, jwt }) => {
+	async ({ body, jwt, store }) => {
 		const securePassword = createHash("sha256")
 			.update(body.password)
 			.digest("hex");
@@ -180,6 +180,7 @@ app.post(
 			const { password, isEmailVerified, ...emptyUser } = user;
 
 			const token = await jwt.sign(emptyUser);
+			store.uid = emptyUser._id;
 
 			return new Response(JSON.stringify({ token, user: emptyUser }), {
 				status: 200,
@@ -215,6 +216,13 @@ app.post(
 			email: t.String({ format: "email", title: "Email" }),
 			password: t.String({ minLength: 8, title: "Password" }),
 		}),
+		afterHandle(context) {
+			if (context.store.uid !== "") {
+				client.mutation(api.files.recordLastActive, {
+					userId: context.store.uid as Id<"users">,
+				});
+			}
+		},
 	}
 );
 
