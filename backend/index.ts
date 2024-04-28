@@ -630,6 +630,18 @@ app.post(
 	}
 );
 
+app.get("usage", async ({ store }) => {
+	const calls = await client.query(api.user.getCalls, {
+		userId: store.uid as Id<"users">,
+	});
+
+	return new Response(JSON.stringify({ calls }), {
+		status: 200,
+		statusText: "OK",
+		headers: { "Content-Type": "application/json" },
+	});
+});
+
 // biome-ignore lint/complexity/useLiteralKeys: <explanation>
 app.listen(process.env["PORT"] || 3000, (e) => {
 	console.log("Server running on port", e.port);
