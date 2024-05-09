@@ -24,7 +24,7 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^11.1.7",
     "lucide-react": "^0.365.0",
-    "next": "14.1.4",
+    "next": "14.2.3",
     "next-themes": "^0.3.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
