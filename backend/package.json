@@ -18,7 +18,7 @@
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/jwt": "^1.0.2",
     "@elysiajs/swagger": "^1.0.3",
-    "@langchain/community": "^0.0.44",
+    "@langchain/community": "^0.0.56",
     "@langchain/core": "^0.1.54",
     "@langchain/openai": "^0.0.26",
     "@react-email/components": "0.0.16",
