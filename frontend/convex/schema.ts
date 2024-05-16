@@ -47,6 +47,7 @@ export default defineSchema({
 	}).vectorIndex("byEmbedding", {
 		vectorField: "embedding",
 		dimensions: 1536,
+		// dimensions: 3072,
 	}),
 	messages: defineTable({
 		// Which conversation this message belongs to
@@ -60,6 +61,9 @@ export default defineSchema({
 				role: v.optional(v.string()),
 				name: v.optional(v.string()),
 				additional_kwargs: v.optional(v.any()),
+				response_metadata: v.optional(v.any()),
+				invalid_tool_calls: v.optional(v.any()),
+				tool_calls: v.optional(v.any()),
 			}),
 		}),
 	}).index("bySessionId", ["sessionId"]),

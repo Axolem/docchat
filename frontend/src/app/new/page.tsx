@@ -2,54 +2,74 @@
 import Message from "@/components/message";
 import { Button } from "@/components/ui/button";
 import { Ellipsis, Send } from "lucide-react";
-import { getAnswerV2 } from "@/lib/api";
 import { Input } from "@/components/ui/input";
-import { useMutation } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import { useAuth } from "@/providers/auth";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import FilesList from "@/components/files";
 import ThemeToggle from "@/components/theme-selector";
 import FileDialog from "@/components/file-dialog";
 import { toast } from "sonner";
+import { useMutation, useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+
+const welcomeMessage = "Welcome to the chat!";
 
 const Page = () => {
 	// const { user } = useAuth();
 	const [message, setMessage] = useState("");
 	const [isLoading, setIsLoading] = useState(false);
-	// const [messages, setMessages] = useState<
-	// 	{ id: string; text: string; author: "user" | "system" }[]
-	// >([
-	// 	{
-	// 		id: "1",
-	// 		text: "Hi there! I'm Doc Chat, your personal document assistant. How can I help you today?",
-	// 		author: "system",
-	// 	},
-	// ]);
+	const sessionId = "1234567890";
+	const remoteMessages = useQuery(api.messages.list, { sessionId });
+	const sendMessage = useMutation(api.messages.send);
+	const clearMesages = useMutation(api.messages.clear);
 
-	// const { mutateAsync } = useMutation({
-	// 	mutationFn: (_message: string) => getAnswer(_message),
-	// 	mutationKey: ["getAnswer"],
-	// });
+	console.log(remoteMessages);
 
 	const ref = useRef<HTMLDivElement>(null);
 
 	// biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
-	// useEffect(() => {
-	// 	ref.current?.scrollIntoView({ behavior: "smooth" });
-	// }, [messages.length]);
+	useEffect(() => {
+		ref.current?.scrollIntoView({ behavior: "smooth" });
+		setIsLoading(false);
+	}, [remoteMessages]);
+
+	const handleSend = async () => {
+		if (!message) return;
+		setIsLoading(true);
+		await sendMessage({ message, sessionId });
+		setMessage("");
+		// setScrolled(false);
+	};
+
+	const handleClearMessages = async () => {
+		await clearMesages({ sessionId });
+		// setScrolled(false);
+	};
+
+	const messages = useMemo(
+		() =>
+			[{ isViewer: false, text: welcomeMessage, _id: "0" }].concat(
+				(remoteMessages ?? []) as {
+					isViewer: boolean;
+					text: string;
+					_id: string;
+				}[]
+			),
+		[remoteMessages, welcomeMessage]
+	);
 
 	return (
 		<div className="relative w-screen">
 			<div className="no-scrollbar mx-auto mb-24 flex w-full flex-col overflow-x-auto overflow-y-scroll scroll-smooth md:w-3/4">
-				{/* {messages.map((message) => (
+				{messages.map((message) => (
 					<Message
-						key={message.id}
-						{...message}
-						// biome-ignore lint/style/noNonNullAssertion: <explanation>
-						uid={user?._id!}
+						key={message._id}
+						id={message._id}
+						text={message.text}
+						isViewer={message.isViewer}
+						author="system"
 					/>
-				))} */}
+				))}
 				<div ref={ref} />
 				{isLoading && (
 					<Ellipsis className="my-5 ml-28 h-6 w-6 animate-ping" />
@@ -62,7 +82,7 @@ const Page = () => {
 					type="text"
 					onKeyDown={(e) => {
 						if (e.key === "Enter") {
-							// sendMessage();
+							handleSend();
 						}
 					}}
 					value={message}
@@ -71,7 +91,7 @@ const Page = () => {
 						<Button
 							variant="outline"
 							size="icon"
-							// onClick={sendMessage}
+							onClick={handleSend}
 							type="submit"
 							accessKey="Enter"
 							disabled={isLoading}
@@ -90,7 +110,7 @@ const Page = () => {
 			</div>
 
 			<div className="fixed bottom-2 left-2 flex w-1/5 flex-col gap-2">
-				<FilesList />
+				{/* <FilesList /> */}
 				<ThemeToggle />
 			</div>
 		</div>

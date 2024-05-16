@@ -17,9 +17,11 @@ import type {
 import type * as crons from "../crons.js";
 import type * as files from "../files.js";
 import type * as google from "../google.js";
+import type * as helpers from "../helpers.js";
 import type * as langchain_db from "../langchain/db.js";
 import type * as messages from "../messages.js";
 import type * as myActions from "../myActions.js";
+import type * as serve from "../serve.js";
 import type * as user from "../user.js";
 
 /**
@@ -34,9 +36,11 @@ declare const fullApi: ApiFromModules<{
   crons: typeof crons;
   files: typeof files;
   google: typeof google;
+  helpers: typeof helpers;
   "langchain/db": typeof langchain_db;
   messages: typeof messages;
   myActions: typeof myActions;
+  serve: typeof serve;
   user: typeof user;
 }>;
 export declare const api: FilterApi<
