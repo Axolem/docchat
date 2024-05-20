@@ -17,7 +17,7 @@
     "@bogeychan/elysia-logger": "^0.0.21",
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/jwt": "^1.0.2",
-    "@elysiajs/swagger": "^1.0.3",
+    "@elysiajs/swagger": "^1.0.5",
     "@langchain/community": "^0.0.56",
     "@langchain/core": "^0.1.54",
     "@langchain/openai": "^0.0.26",
