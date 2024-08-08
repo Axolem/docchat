@@ -83,7 +83,7 @@ const Page = () => {
 	return (
 		<div className="relative w-screen">
 			<div className="no-scrollbar mx-auto mb-24 flex w-full flex-col overflow-x-auto overflow-y-scroll scroll-smooth md:w-3/4">
-				{messages.map((message) => (
+				{messages?.map((message) => (
 					<Message
 						key={message.id}
 						{...message}
