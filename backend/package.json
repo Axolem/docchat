@@ -28,7 +28,7 @@
     "hnswlib-node": "^3.0.0",
     "langchain": "^0.2.0",
     "pdf-parse": "^1.1.1",
-    "react-email": "2.1.4",
+    "react-email": "2.1.6",
     "resend": "^3.2.0"
   }
 }
