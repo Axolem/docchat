@@ -14,7 +14,7 @@
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "@bogeychan/elysia-logger": "^0.0.21",
+    "@bogeychan/elysia-logger": "^0.1.4",
     "@elysiajs/cors": "^1.0.2",
     "@elysiajs/jwt": "^1.0.2",
     "@elysiajs/swagger": "^1.1.0",
