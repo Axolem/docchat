@@ -23,7 +23,7 @@
     "@langchain/openai": "^0.0.26",
     "@react-email/components": "0.0.22",
     "convex": "^1.11.3",
-    "elysia": "^1.0.13",
+    "elysia": "^1.1.18",
     "elysia-rate-limit": "^4.1.0",
     "hnswlib-node": "^3.0.0",
     "langchain": "^0.2.0",
